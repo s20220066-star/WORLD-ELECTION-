@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     const articles = (Array.isArray(data.articles) ? data.articles : []).map(a => ({
       title: a.title || "タイトルなし", url: a.url || "", domain: a.domain || "",
       date: a.seendate || "", country: a.sourcecountry || ""
-    })).filter(a => a.url && /^https?:\\/\\//i.test(a.url));
+    })).filter(a => a.url && (a.url.startsWith("https://") || a.url.startsWith("http://")));
     res.status(200).json({ provider: "GDELT Project", fetchedAt: new Date().toISOString(), articles });
   } catch (error) {
     res.status(502).json({ error: "公開ニュースデータの取得に失敗しました。", detail: String(error.message || error) });
